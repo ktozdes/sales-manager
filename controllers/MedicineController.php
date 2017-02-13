@@ -6,7 +6,7 @@ class MedicineController
 
     function __construct()
     {
-        $this->printer = new PrintView(array('file'=>'/views/view_input.php'));
+        $this->printer = new PrintView(array('file'=>'views/view_input.php'));
     }
 
     public function helloworld()

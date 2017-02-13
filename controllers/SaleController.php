@@ -5,7 +5,7 @@ class SaleController
     private $printer;
 	function __construct()
 	{
-	    $this->printer = new PrintView(array('file'=>'/views/sales.php'));;
+	    $this->printer = new PrintView(array('file'=>'views/sales.php'));
 	}
 	
 	public function helloworld()
@@ -15,7 +15,6 @@ class SaleController
 
     public function getSalesPage()
     {
-
         $ClientController = new ClientController();
         $MedicineController = new MedicineController();
         $result[client_list] = $ClientController->getClientListData();

@@ -8,7 +8,7 @@ class PaymentController
 
 	function __construct()
 	{
-        $this->printer = new PrintView(array('file'=>'/views/view_payment.php'));
+        $this->printer = new PrintView(array('file'=>'views/view_payment.php'));
 	}
 	
 	public function helloworld()

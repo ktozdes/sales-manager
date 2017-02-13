@@ -7,7 +7,7 @@ class ReportController
     function __construct()
     {
         if ($_GET[request]!='file')
-            $this->printer = new PrintView(array('file'=>'/views/view_report.php'));
+            $this->printer = new PrintView(array('file'=>'views/view_report.php'));
         else{
             $this->printer = new ExcelController(array(filename=>"report_medistom",columnLength=>7,autoWidth=>true));
         }
