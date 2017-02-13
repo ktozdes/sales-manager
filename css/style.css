@@ -1,0 +1,30 @@
+body.home_page {
+  background-color: #333;
+}
+body.home_page {
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,.5);
+}
+.home_page h1{
+  text-align: center;
+}
+.home_page  .intro-info{
+  border-radius:7px;
+  border:2px solid #FFF;
+  margin-top:30px ;
+  margin-bottom:30px ;
+}
+
+.page{
+	background-color: #F5F5F5;
+}
+.alert{
+	margin-top:30px;
+}
+.save_return_button, .cancel_return_button{
+    display:none;
+}
+.payment_page .exchange_currency{
+    display:none;
+}
+/* nav bar*/
