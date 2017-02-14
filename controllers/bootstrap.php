@@ -108,10 +108,10 @@ function getPagination($max_row)
     $currentPage = isset($_GET[page])?$_GET[page]:1;
     $uri_parts = explode('?', $_SERVER['REQUEST_URI'], 2);
     $uri_parts = 'http://' . $_SERVER['HTTP_HOST'] . $uri_parts[0];
-    
-    unset($_GET['page']);
-    if (count($_GET) >0){
-        foreach ($_GET as $key => $value){
+    $tempGET = $_GET;
+    unset($tempGET['page']);
+    if (count($tempGET) >0){
+        foreach ($tempGET as $key => $value){
             $uri_parts .= strpos($uri_parts, '?') === false ? '?' . $key . '=' . $value : '&' . $key . '=' . $value;
         }
     }
