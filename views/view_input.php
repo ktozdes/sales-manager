@@ -38,7 +38,7 @@ if ($section =='medicine_list'):?>
             <form method="get">
                 <table class="table table-striped table-responsive table-hover table-condensed">
                     <tr>
-                        <td><input type="text" class="form-control" name="medicine_name" placeholder="Название Товара"/> </td>
+                        <td><input type="text" class="form-control" name="medicine_name" placeholder="Название Товара" value="<?php echo $_GET['medicine_name'];?>"/> </td>
                         <td><input type="text" class="form-control" name="medicine_code" placeholder="Штрих Код"/></td>
                         <td><input type="submit" class="btn btn-default" value="Поиск"/></td>
                     </tr>

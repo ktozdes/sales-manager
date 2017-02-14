@@ -106,10 +106,20 @@ function getCurrencyList()
 function getPagination($max_row)
 {
     $currentPage = isset($_GET[page])?$_GET[page]:1;
-    echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+    $uri_parts = explode('?', $_SERVER['REQUEST_URI'], 2);
+    $uri_parts = 'http://' . $_SERVER['HTTP_HOST'] . $uri_parts[0];
+    
+    unset($_GET['page']);
+    if (count($_GET) >0){
+        foreach ($_GET as $key => $value){
+            $uri_parts .= strpos($uri_parts, '?') === false ? '?' . $key . '=' . $value : '&' . $key . '=' . $value;
+        }
+    }
+
     $p = new pagination();
     $p->Items($max_row);
     $p->limit(ITEM_PER_PAGE);
+    $p->target($uri_parts);
     $p->parameterName("page");
     $p->currentPage($currentPage);
     $p->nextLabel('');
