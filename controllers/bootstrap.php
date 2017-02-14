@@ -106,6 +106,7 @@ function getCurrencyList()
 function getPagination($max_row)
 {
     $currentPage = isset($_GET[page])?$_GET[page]:1;
+    echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     $p = new pagination();
     $p->Items($max_row);
     $p->limit(ITEM_PER_PAGE);

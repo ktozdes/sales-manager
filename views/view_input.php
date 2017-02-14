@@ -35,7 +35,7 @@ if ($section =='medicine_list'):?>
             </h1>
             <p><a href="?action=new" class="btn btn-primary">Новый Товар</a>   <a href="?action=new_category" class="btn btn-primary">Добавить Производителя</a></p>
         <?php echo $result[pagination];?>
-            <form method="post">
+            <form method="get">
                 <table class="table table-striped table-responsive table-hover table-condensed">
                     <tr>
                         <td><input type="text" class="form-control" name="medicine_name" placeholder="Название Товара"/> </td>

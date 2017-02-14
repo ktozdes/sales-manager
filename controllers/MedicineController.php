@@ -44,14 +44,14 @@ class MedicineController
             $result[country_list] = getCountryList();
             $result[currency_list] = getCurrencyList();
             $result[category_list] = $this->getMedicineCategoryList();
-            if (strlen($_POST[medicine_name])>3 || strlen($_POST[medicine_code])>3){
+            if (strlen($_GET[medicine_name])>3 || strlen($_POST[medicine_code])>3){
                 $action_result = $this->checkIfMedicineExists($_POST);
                 if ($action_result!=''){
                     $result[medicine_code]='';
                     $result[medicine_name]='';
                 }
             }
-            if (strlen($_POST[medicine_name])>3 && $_POST[medicine_quantity]>0 && $_POST[medicine_price]>0 && $action_result==''){
+            if (strlen($_GET[medicine_name])>3 && $_POST[medicine_quantity]>0 && $_POST[medicine_price]>0 && $action_result==''){
                 $action_result = $this->saveMedicine($_POST);
             }
             $result[action_result] = $action_result;
@@ -100,8 +100,8 @@ class MedicineController
     {
         global $db;
         $query = '';
-        if (strlen($_POST[medicine_name])>0){
-            $query .= (strlen($query)<3)?" WHERE medicine_name LIKE '%$_POST[medicine_name]%'":"  medicine_name LIKE '%$_POST[medicine_name]%'";
+        if (strlen($_GET[medicine_name])>0){
+            $query .= (strlen($query)<3)?" WHERE medicine_name LIKE '%$_GET[medicine_name]%'":"  medicine_name LIKE '%$_GET[medicine_name]%'";
         }
         if (strlen($_POST[medicine_code])>0){
             $query .= (strlen($query)<3)?" WHERE medicine_code LIKE '%$_POST[medicine_code]%'":"   OR medicine_code LIKE '%$_POST[medicine_code]%'";
@@ -136,8 +136,8 @@ class MedicineController
     {
         global $db;
         $query = '';
-        if (strlen($_POST[medicine_name])>0){
-            $query .= (strlen($query)<3)?" WHERE medicine_name LIKE '%$_POST[medicine_name]%'":"  medicine_name LIKE '%$_POST[medicine_name]%'";
+        if (strlen($_GET[medicine_name])>0){
+            $query .= (strlen($query)<3)?" WHERE medicine_name LIKE '%$_GET[medicine_name]%'":"  medicine_name LIKE '%$_GET[medicine_name]%'";
         }
         if (strlen($_POST[medicine_code])>0){
             $query .= (strlen($query)<3)?" WHERE medicine_code LIKE '%$_POST[medicine_code]%'":"   OR medicine_code LIKE '%$_POST[medicine_code]%'";
@@ -228,7 +228,7 @@ class MedicineController
             $statement = $db->prepare("INSERT INTO medicine (medicine_code, medicine_name, medicine_price,medicine_currency_id ,medicine_quantity, medicine_production_date, medicine_country, medicine_other, medicine_manufacture_id)
                 VALUES(:medicine_code, :medicine_name, :medicine_price,:medicine_currency_id, :medicine_quantity, :medicine_production_date, :medicine_country, :medicine_other,:medicine_manufacture_id)");
             $statement->bindParam(':medicine_code', $_POST[medicine_code]);
-            $statement->bindParam(':medicine_name', $_POST[medicine_name]);
+            $statement->bindParam(':medicine_name', $_GET[medicine_name]);
             $statement->bindParam(':medicine_quantity', $_POST[medicine_quantity]);
             $statement->bindParam(':medicine_production_date', $_POST[medicine_production_date]);
             $statement->bindParam(':medicine_country', $_POST[medicine_country]);

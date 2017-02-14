@@ -39,6 +39,6 @@
 			<p class="text-center"><a href="<?php echo $siteData['url']?>/report" class="btn btn-lg btn-info">Отчет</a></p>
 		</div>
 		<div class="col-sm-6">
-			<p class="text-center"><a href="<?php echo $siteData['url']?>#" class="btn btn-lg btn-info">что-то</a></p>
+			<p class="text-center"><a href="<?php echo $siteData['url']?>#" class="btn btn-lg btn-info">Айка</a></p>
 		</div>
 	</div>
