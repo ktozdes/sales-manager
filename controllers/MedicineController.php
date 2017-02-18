@@ -50,7 +50,7 @@ class MedicineController
                     $result[medicine_code]='';
                     $result[medicine_name]='';
                 }
-            } 
+            }
             if (strlen($_POST[medicine_name])>3 && $_POST[medicine_quantity]>0 && $_POST[medicine_price]>0 && $action_result==''){
                 $action_result = $this->saveMedicine($_POST);
             }
