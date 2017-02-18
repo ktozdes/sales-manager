@@ -27,4 +27,7 @@ body.home_page {
 .payment_page .exchange_currency{
     display:none;
 }
+.medicine_list_container{
+  display:none;
+}
 /* nav bar*/

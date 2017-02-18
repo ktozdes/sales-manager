@@ -1,5 +1,4 @@
 $(document).ready(function(){
-    $('.datepicker').mask('00-00-0000');
 	$('.datepicker').datepicker({
 		changeMonth: true,
 		changeYear: true,
@@ -25,7 +24,46 @@ $(document).ready(function(){
             }
         }
     });
+    var delay = (function(){
+        var timer = 0;
+        return function(callback, ms){
+            clearTimeout (timer);
+            timer = setTimeout(callback, ms);
+        };
+    })();
 
+    $('.sales_page input[name="sale_medicine_name"]').on('keyup', function(e) {
+        if ($(this).val().length > 3){
+            var thisInput = $(this);
+            delay(function(){
+                $.ajax ({
+                    url: '?request=ajax',
+                    type: "POST",
+                    data: {
+                        sale_medicine_name:thisInput.val()
+                    },
+                    dataType: "json",
+                    success: function(data){
+                        $('.medicine_list_container .data').remove();
+                        $.each( data, function( key, value ) {
+                            $('.medicine_list_container table tbody').append(`
+                    <tr class="data">
+                        <td><a href="?medicine_id=`+value.medicine_id+`">`+value.medicine_code+`</a></td>
+                        <td><a href="?medicine_id=`+value.medicine_id+`">`+value.medicine_name+`</a></td>
+                        <td><a href="?medicine_id=`+value.medicine_id+`">`+value.medicine_manufacture_name+`</a></td>
+                    </tr>
+                            `);
+                        });
+
+                        $('.medicine_list_container').fadeIn();
+                    },
+                    error : function (response, status) {
+                        console.log('ERROR:' + response+'::'+status);
+                    }
+                });
+            }, 2000 );
+        }
+    });
     $('.sales_page input[name=sale_quantity], .sales_page input[name=sale_payment], .sales_page input[name=sale_exchange_rate], .sales_page .balance_exchange').keyup(function(){
         calculateSaleData();
     });
@@ -64,7 +102,6 @@ $(document).ready(function(){
 
 function calculateSaleData()
 {
-    console.log('calculate');
     $('.label-danger').remove();
     var quantity = $('.sales_page input[name=sale_quantity]');
     var price = $('.sales_page input[name=sale_price]');

@@ -12,7 +12,10 @@
                     $('input[name=sale_medicine_id]').val('');
                     $('input[name=sale_quantity]').val('');
                     $('input[name=sale_price]').val('');
-                    $('.medicine_data_table tr td').html('');
+
+                    $('.medicine_list_container').fadeOut('600', function(){
+                        $('.medicine_list_container .data').remove();
+                    });
 
                 });
                 if ($('input[name=sale_medicine_code]').val()==''){
@@ -84,25 +87,27 @@
                     </tbody>
                 </table>
             </form>
-            <?php if (count($result[medicine_list])>0):?>
+            <div class="medicine_list_container">
             <h3>Результаты Поиска</h3>
-            <table class="table table-striped table-responsive table-hover table-condensed">
-                <tbody>
-                <tr>
-                    <th>Код</th>
-                    <th>Название</th>
-                    <th>Производитель</th>
-                </tr>
-            <?php foreach($result[medicine_list] as $singleMedicine):?>
-                <tr>
-                    <td><a href="?medicine_id=<?php echo $singleMedicine[medicine_id]?>"><?php echo $singleMedicine[medicine_code]?></a></td>
-                    <td><a href="?medicine_id=<?php echo $singleMedicine[medicine_id]?>"><?php echo $singleMedicine[medicine_name]?></a></td>
-                    <td><a href="?medicine_id=<?php echo $singleMedicine[medicine_id]?>"><?php echo $singleMedicine[medicine_manufacture_name]?></a></td>
-                </tr>
-            <?php endforeach;?>
-                </tbody>
-            </table>
-            <?php endif;?>
+                <table class="table table-striped table-responsive table-hover table-condensed">
+                    <tbody>
+                    <tr class="header">
+                        <th>Код</th>
+                        <th>Название</th>
+                        <th>Производитель</th>
+                    </tr>
+                <?php if (count($result[medicine_list])>0):?>
+                    <?php foreach($result[medicine_list] as $singleMedicine):?>
+                    <tr class="data">
+                        <td><a href="?medicine_id=<?php echo $singleMedicine[medicine_id]?>"><?php echo $singleMedicine[medicine_code]?></a></td>
+                        <td><a href="?medicine_id=<?php echo $singleMedicine[medicine_id]?>"><?php echo $singleMedicine[medicine_name]?></a></td>
+                        <td><a href="?medicine_id=<?php echo $singleMedicine[medicine_id]?>"><?php echo $singleMedicine[medicine_manufacture_name]?></a></td>
+                    </tr>
+                    <?php endforeach;?>
+                <?php endif;?>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <form method="post" class="save_form">
         <div class="col-sm-6">

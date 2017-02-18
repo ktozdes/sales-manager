@@ -40,6 +40,10 @@ class SaleController
             }
             if (strlen($_POST[sale_medicine_name])>0){
                 $result[medicine_list] = $MedicineController->getMedicineListByName(array(medicine_name=>$_POST[sale_medicine_name]));
+                if (isset($_GET[request]) && $_GET[request]=='ajax'){
+                    echo json_encode($result[medicine_list]);
+                    die;
+                }
             }
             if ($_POST[sale_client_id]>0){
                 $result[client_data] = $ClientController->getSingleClientData(array(client_id=>$_POST[sale_client_id]));
