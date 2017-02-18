@@ -72,6 +72,13 @@ $(document).ready(function(){
         calculateSaleData();
     });
 
+    //cleint: edit balance
+    $('body').on('click', '#myModal .yes-button', function(){
+        $('.client-balance input').removeAttr('disabled');
+    });
+    $('body').on('click', '#myModal .no-button', function(){
+        
+    })
 
     //save payment
     $('.payment_page input[name=set_balance]').click(function(){
@@ -207,4 +214,13 @@ function cancelReturn(e)
     $(e).parents('tr').find(' input[type=text]').attr('disabled',true);
     $(e).parents('tr').find('.save_return_button, .cancel_return_button').hide();
     $(e).parents('tr').find('.return_button,.payment_button').show();
+}
+
+var makeBalanceEditable = false;
+
+function editableBalance(){
+    if (makeBalanceEditable == false){
+        $('.popup-button').trigger('click');
+    }
+
 }

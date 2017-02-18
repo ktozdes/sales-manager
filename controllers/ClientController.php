@@ -107,17 +107,58 @@ class ClientController
 			$params['client_birthday'] = $birthday->format('Y-m-d');
 		}
 		try{
-			$statement = $db->query("UPDATE client SET 
-				client_firstname = '$params[client_firstname]' ,
-				client_lastname = '$params[client_lastname]' ,
-				client_phone = '$params[client_phone]' ,
-				client_email = '$params[client_email]' ,
-				client_address = '$params[client_address]' ,
-				client_company = '$params[client_company]' ,
-				client_birthday = '$params[client_birthday]'
-			WHERE client_id = $params[client_id]");
-			
-			$result = $statement->execute(); 
+
+
+            $statement = $db->query("UPDATE client SET 
+                client_firstname = '$params[client_firstname]' ,
+                client_lastname = '$params[client_lastname]' ,
+                client_phone = '$params[client_phone]' ,
+                client_email = '$params[client_email]' ,
+                client_address = '$params[client_address]' ,
+                client_company = '$params[client_company]' ,
+                client_birthday = '$params[client_birthday]'
+            WHERE client_id = $params[client_id]");
+            
+            $result = $statement->execute(); 
+            //saving as transaction
+            if (isset($params['client_balance_balance']) && count($params['client_balance_balance']) > 0){
+                $clientData= $this->getSingleClientData(array(client_id=>$params[client_id]));
+                foreach($params['client_balance_balance'] as $key=>$value){
+                    foreach($clientData['balance'] as $innerKey => $currentBalance){
+                        if (abs($params['currency_id'][$key] - $currentBalance['currency_id']) < 0.01 && 
+                            (abs($params['client_balance_balance'][$key] - $currentBalance['client_balance_balance']) > 0.01 ||
+                            abs($params['client_balance_debt'][$key] - $currentBalance['client_balance_debt']) > 0.01)
+                            ){
+                            $statement = $db->prepare("INSERT INTO balance_change
+                                (client_id, balance_was, balance_became, debt_was, debt_became, currency_id, `date`)
+                                VALUES 
+                                (:client_id, :balance_was, :balance_became, :debt_was, :debt_became, :currency_id, :date)");
+
+                            $statement->bindParam(':client_id', $params['client_id']);
+                            $statement->bindParam(':balance_was', $currentBalance['client_balance_balance']);
+                            $statement->bindParam(':balance_became', $params['client_balance_balance'][$key]);
+                            $statement->bindParam(':debt_was', $currentBalance['client_balance_debt']);
+                            $statement->bindParam(':debt_became', $params['client_balance_debt'][$key]);
+                            $statement->bindParam(':currency_id', $params['currency_id'][$key]);
+                            $statement->bindParam(':date', date('Y-n-d H:i:s'));
+
+                            $insertResult =  $statement->execute();
+
+                            $statement = $db->prepare("UPDATE client_balance SET 
+                                client_balance_debt = :client_balance_debt,
+                                client_balance_balance = :client_balance_balance
+                                WHERE client_balance_client_id = :client_balance_client_id AND client_balance_currency_id = :client_balance_currency_id");
+
+                            $statement->bindParam(':client_balance_balance', $params['client_balance_balance'][$key]);
+                            $statement->bindParam(':client_balance_debt', $params['client_balance_debt'][$key]);
+                            $statement->bindParam(':client_balance_client_id', $params['client_id']);
+                            $statement->bindParam(':client_balance_currency_id', $params['currency_id'][$key]);
+
+                            $insertResult =  $statement->execute();
+                        }
+                    }
+                }
+            }
 			return $result;
 		}
 		catch(PDOException $ex) {
