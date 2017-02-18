@@ -120,7 +120,7 @@ class ClientController
             WHERE client_id = $params[client_id]");
             
             $result = $statement->execute(); 
-            //saving as transaction
+            //saving manual balance change
             if (isset($params['client_balance_balance']) && count($params['client_balance_balance']) > 0){
                 $clientData= $this->getSingleClientData(array(client_id=>$params[client_id]));
                 foreach($params['client_balance_balance'] as $key=>$value){

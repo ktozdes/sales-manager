@@ -63,6 +63,17 @@ $(document).ready(function(){
                 });
             }, 2000 );
         }
+        else if ($(this).val().length ==0){
+            $('input[name=sale_medicine_name]').val('');
+            $('input[name=sale_medicine_code]').val('');
+            $('input[name=sale_medicine_id]').val('');
+            $('input[name=sale_quantity]').val('');
+            $('input[name=sale_price]').val('');
+
+            $('.medicine_list_container').fadeOut('600', function(){
+                $('.medicine_list_container .data').remove();
+            });
+        }
     });
     $('.sales_page input[name=sale_quantity], .sales_page input[name=sale_payment], .sales_page input[name=sale_exchange_rate], .sales_page .balance_exchange').keyup(function(){
         calculateSaleData();
