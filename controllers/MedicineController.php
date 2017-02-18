@@ -51,7 +51,7 @@ class MedicineController
                     $result[medicine_name]='';
                 }
             }
-            if (strlen($_GET[medicine_name])>3 && $_POST[medicine_quantity]>0 && $_POST[medicine_price]>0 && $action_result==''){
+            if (strlen($_POST[medicine_name])>3 && $_POST[medicine_quantity]>0 && $_POST[medicine_price]>0 && $action_result==''){
                 $action_result = $this->saveMedicine($_POST);
             }
             $result[action_result] = $action_result;
@@ -228,7 +228,7 @@ class MedicineController
             $statement = $db->prepare("INSERT INTO medicine (medicine_code, medicine_name, medicine_price,medicine_currency_id ,medicine_quantity, medicine_production_date, medicine_country, medicine_other, medicine_manufacture_id)
                 VALUES(:medicine_code, :medicine_name, :medicine_price,:medicine_currency_id, :medicine_quantity, :medicine_production_date, :medicine_country, :medicine_other,:medicine_manufacture_id)");
             $statement->bindParam(':medicine_code', $_POST[medicine_code]);
-            $statement->bindParam(':medicine_name', $_GET[medicine_name]);
+            $statement->bindParam(':medicine_name', $_POST[medicine_name]);
             $statement->bindParam(':medicine_quantity', $_POST[medicine_quantity]);
             $statement->bindParam(':medicine_production_date', $_POST[medicine_production_date]);
             $statement->bindParam(':medicine_country', $_POST[medicine_country]);
