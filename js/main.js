@@ -87,9 +87,58 @@ $(document).ready(function(){
     $('body').on('click', '#myModal .yes-button', function(){
         $('.client-balance input').removeAttr('disabled');
     });
-    $('body').on('click', '#myModal .no-button', function(){
-        
-    })
+
+    //medicine: edit quantity inline
+    $('body').on('dblclick', 'input.quantity-input', function(){
+        //glyphicon 
+        $('input.quantity-input').attr('disabled','disabled');
+        $('.edit-medicine-icon-button span').removeClass('glyphicon-floppy-disk');
+        $('.edit-medicine-icon-button span').addClass('glyphicon-pencil');
+        $(this).removeAttr('disabled');
+        $(this).parents('.table-data-row').find('.edit-medicine-icon-button span').removeClass('glyphicon-pencil');
+        $(this).parents('.table-data-row').find('.edit-medicine-icon-button span').addClass('glyphicon-floppy-disk');
+    });
+    $('body').on('click', '.edit-medicine-icon-button .glyphicon-floppy-disk', function(){
+        var parentRow = $(this).parents('.table-data-row');
+        if (parentRow.find('input.quantity-input').val()>0){
+            $.ajax ({
+                url: '?request=ajax',
+                type: "GET",
+                data: {
+                    'action':'update-quantity',
+                    'medicine_quantity':parentRow.find('input.quantity-input').val(),
+                    'medicine_id':parentRow.find('input.medicine-id').val()
+                },
+                dataType: "json",
+                success: function(data){
+                    console.log(data);
+
+                    parentRow.addClass( "success" );
+                    setTimeout(function(){
+                        parentRow.removeClass( "success" );
+                    }, 500);
+                    parentRow.html(`
+                        <td>
+                            <input class="medicine-id" type="hidden" value="`+data.medicine_id+`"/>
+                            `+data.medicine_code+`</td>
+                        <td><a href="?action=edit&medicine_id=`+data.medicine_id+`">`+data.medicine_name+`</a></td>
+                        <td>`+data.medicine_price+` `+data.currency_code+`</td>
+                        <td>`+data.medicine_quantity+`</td>
+                        <td><input style="text-align:right" class="form-control quantity-input" type="number" value="" disabled="disabled"/></td>
+                        <td>
+                            <a href="javascript:void(0)" class="edit-medicine-icon-button"><span class="glyphicon glyphicon-pencil"></span></a>
+                            <a href="?action=delete&medicine_id=`+data.medicine_id+`"><span class="glyphicon glyphicon-remove"></span></a>
+                        </td>
+                    `);
+                    parentRow.switchClass( "big", "blue", 1000, "easeInOutQuad" );
+                },
+                error : function (response, status) {
+                    console.log(response);
+                    console.log('ERROR:' + response+'::'+status);
+                }
+            });
+        }
+    });
 
     //save payment
     $('.payment_page input[name=set_balance]').click(function(){

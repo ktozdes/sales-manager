@@ -24,6 +24,15 @@ class MedicineController
             $result[page_title] = 'Список Товаров';
             $this->printer->printHtml(array('medicine_list'),$result);
         }
+        else if ($_GET['action']=='update-quantity' && $_GET['request']=='ajax' && is_numeric($_GET['medicine_id']) && is_numeric($_GET['medicine_quantity']) ){
+            $action_result ='';
+            if ($_GET['medicine_quantity'] > 0){
+                $action_result = $this->updateMedicineQuantity($_GET);
+            }
+            $result = $this->getMedicineByID($_GET);
+            echo json_encode($result);
+            die;
+        }
         else if ($_GET[action]=='edit' && is_numeric($_GET[medicine_id])){
             if (isset($_POST[medicine_id]) && $_POST[medicine_id]>0){
                 $action_result = $this->updateMedicine($_POST);
@@ -358,6 +367,34 @@ class MedicineController
             return 'fail';
         }
         return 'fail';
+    }
+    private function updateMedicineQuantity($params)
+    {
+        global $db;
+        try{
+            $thisMedicine = $this->getMedicineByID(array('medicine_id' => $params[medicine_id]));
+            $statement = $db->prepare("UPDATE medicine set medicine_quantity=medicine_quantity +:medicine_quantity WHERE medicine_id = :medicine_id");
+            $statement->bindParam(':medicine_quantity', $params[medicine_quantity]);
+            $statement->bindParam(':medicine_id', $params[medicine_id]);
+
+            $updateResult =  $statement->execute();
+            $statement = $db->prepare("INSERT INTO medicine_income (medicine_income_medicine_id,medicine_income_price,medicine_income_currency_id,medicine_income_quantity,medicine_income_date)
+                VALUES(:medicine_id,:medicine_price,:medicine_currency_id,:medicine_quantity,:today)");
+            $statement->bindParam(':medicine_id', $params[medicine_id]);
+            $statement->bindParam(':medicine_quantity', $params[medicine_quantity]);
+            $statement->bindParam(':medicine_price', $thisMedicine[medicine_price]);
+            $statement->bindParam(':medicine_currency_id', $thisMedicine[medicine_currency_id]);
+            $statement->bindParam(':today', date('Y-m-d'));
+
+            $updateResult =  $statement->execute();
+
+            return ( $updateResult==true)?'update':'fail';
+        }
+        catch(PDOException $ex) {
+            return 'fail';
+        }
+        return 'fail';
+
     }
 
     private function updateMedicineCategory($params)

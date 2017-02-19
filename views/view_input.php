@@ -29,12 +29,12 @@ if ($section =='medicine_list'):?>
                 <div class="alert alert-danger" role="danger">Не удалось удалить</div>
             <?php endif;?>
         </div>
-        <div class="col-sm-12">
+        <div class="col-sm-12 medicine-list-page">
             <h1 class="page-header">
                 <?php echo $result[page_title];?>
             </h1>
             <p><a href="?action=new" class="btn btn-primary">Новый Товар</a>   <a href="?action=new_category" class="btn btn-primary">Добавить Производителя</a></p>
-        <?php echo $result[pagination];?>
+            <?php echo $result[pagination];?>
             <form method="get">
                 <table class="table table-striped table-responsive table-hover table-condensed">
                     <tr>
@@ -45,35 +45,39 @@ if ($section =='medicine_list'):?>
 
                 </table>
             </form>
-        <table class="table table-striped table-responsive table-hover table-condensed">
-            <thead>
-            <tr>
-                <th>Код</th>
-                <th>Название</th>
-                <th>Цена</th>
-                <th>В наличии</th>
-                <th>Операции</th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php
-            if (count($result[medicine_list])>0):?>
-                <?php foreach ($result[medicine_list] as $key=>$singleMedicineRow):?>
-                    <tr>
-                        <td><?php echo $singleMedicineRow[medicine_code];?></td>
-                        <td><?php echo $singleMedicineRow[medicine_name];?></td>
-                        <td><?php echo number_format($singleMedicineRow[medicine_price],2,'.',' ').' '.$singleMedicineRow[currency_code];?></td>
-                        <td><?php echo $singleMedicineRow[medicine_quantity];?></td>
-                        <td>
-                            <a href="?action=edit&medicine_id=<?php echo $singleMedicineRow[medicine_id];?>"><span class="glyphicon glyphicon-pencil"></span></a>
-                            <a href="?action=delete&medicine_id=<?php echo $singleMedicineRow[medicine_id];?>"><span class="glyphicon glyphicon-remove"></span></a>
-                        </td>
-                    </tr>
-                <?php endforeach;?>
-            <?php endif;?>
-            </tbody>
-        </table>
-    </div>
+            <table class="table table-striped table-responsive table-hover table-condensed form-inline">
+                <thead>
+                <tr>
+                    <th>Код</th>
+                    <th>Название</th>
+                    <th>Цена</th>
+                    <th>В наличии</th>
+                    <th>Добавить</th>
+                    <th>Операции</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                if (count($result[medicine_list])>0):?>
+                    <?php foreach ($result[medicine_list] as $key=>$singleMedicineRow):?>
+                        <tr class="table-data-row">
+                            <td>
+                                <input class="medicine-id" type="hidden" value="<?php echo $singleMedicineRow[medicine_id];?>"/>
+                                <?php echo $singleMedicineRow[medicine_code];?></td>
+                            <td><a href="?action=edit&medicine_id=<?php echo $singleMedicineRow[medicine_id];?>"><?php echo $singleMedicineRow[medicine_name];?></a></td>
+                            <td><?php echo number_format($singleMedicineRow[medicine_price],2,'.',' ').' '.$singleMedicineRow[currency_code];?></td>
+                            <td><?php echo $singleMedicineRow[medicine_quantity];?></td>
+                            <td><input style="text-align:right" class="form-control quantity-input" type="number" value="" disabled="disabled"/></td>
+                            <td>
+                                <a href="javascript:void(0)" class="edit-medicine-icon-button"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a href="?action=delete&medicine_id=<?php echo $singleMedicineRow[medicine_id];?>"><span class="glyphicon glyphicon-remove"></span></a>
+                            </td>
+                        </tr>
+                    <?php endforeach;?>
+                <?php endif;?>
+                </tbody>
+            </table>
+        </div>
 
 <?php elseif ($section =='single_medicine'):?>
 
