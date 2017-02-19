@@ -32,7 +32,7 @@
                             $('select[name=sale_client_id]').after('<span class="label label-danger">Выберите Клиента</span>');
                         }
                         if ($('input[name=sale_price]').val()==''){
-                            $('input[name=sale_price]').after('<span class="label label-danger">Выберите Клиента</span>');
+                            $('input[name=sale_price]').after('<span class="label label-danger">Цена не может быть пустой</span>');
                         }
                         if ( $('input[name=sale_quantity]').val()=='' || $('input[name=sale_quantity]').val()=='0'){
                             $('input[name=sale_quantity]').after('<span class="label label-danger">Выберите Количество</span>');

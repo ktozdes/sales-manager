@@ -365,6 +365,9 @@ class ClientController
                 }
                 return $insertResult==true?'ok':'fail';
             }
+            else{
+                return 'free item returned';
+            }
         }
         catch(PDOException $ex) {
             echo "An Error occured!";

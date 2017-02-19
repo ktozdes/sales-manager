@@ -211,7 +211,7 @@ function saveReturn(e)
         },
         function(data){
             alert(data);
-            if (data=='returned'){
+            if (data=='returned' || data=='Free item returned'){
                 $('form').submit();
             }
         }

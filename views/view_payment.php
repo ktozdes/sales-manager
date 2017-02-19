@@ -75,38 +75,70 @@
                     </tbody>
                 </table>
             </form>
+            <?php if (count($result[unpaid_good_list])>0):?>
             <h3 class="page-header">
                 Не Оплаченые Товары
             </h3>
             <table class="table table-striped table-responsive table-hover table-condensed">
-                <?php if (count($result[unpaid_good_list])>0):?>
+                <tr>
+                    <th>Название</th>
+                    <th>Цена</th>
+                    <th>Количество</th>
+                    <th>Сумма</th>
+                    <th>Операции</th>
+                </tr>
+                <?php foreach($result[unpaid_good_list] as $singleGood):?>
                     <tr>
-                        <th>Название</th>
-                        <th>Цена</th>
-                        <th>Количество</th>
-                        <th>Сумма</th>
-                        <th>Операции</th>
-                    </tr>
-                    <?php foreach($result[unpaid_good_list] as $singleGood):?>
-                        <tr>
 
-                            <td><input type="hidden" name="sale_medicine_id" value="<?php echo $singleGood[sale_medicine_id];?>"/>
-                                <input type="hidden" name="sale_id" value="<?php echo $singleGood[sale_id];?>"/>
-                                <?php echo $singleGood[medicine_name];?></td>
-                            <td><?php echo number_format($singleGood[sale_price],2,'.',' ').' '.$singleGood[currency_code]?></td>
-                            <td><input type="text" name="quantity" class="form-control" value="<?php echo $singleGood[sale_quantity];?>" disabled/> </td>
-                            <td><?php echo number_format(($singleGood[sale_price] * $singleGood[sale_quantity]),2,'.',' ').' '.$singleGood[currency_code];?></td>
-                            <td><?php if ($singleGood[payment_ok]===true):?>
-                                    <a href="javascript:void(0)" onclick="paymentPaid(this)" class="btn btn-info payment_button"><span class="glyphicon glyphicon-ok"></span>Оплатить</a>
-                                <?php endif;?>
-                                <a href="javascript:void(0)" onclick="activateReturn(this)" class="btn btn-warning return_button"><span class="glyphicon glyphicon-pencil"></span> Возврат</a>
-                                <a href="javascript:void(0)" onclick="saveReturn(this)" class="btn btn-info save_return_button"><span class="glyphicon glyphicon-pencil"></span>Возвратить</a>
-                                <a href="javascript:void(0)" onclick="cancelReturn(this)" class="btn btn-warning cancel_return_button"><span class="glyphicon glyphicon-remove"></span> Отмена</a>
-                            </td>
-                        </tr>
-                    <?php endforeach;
-                endif;?>
+                        <td><input type="hidden" name="sale_medicine_id" value="<?php echo $singleGood[sale_medicine_id];?>"/>
+                            <input type="hidden" name="sale_id" value="<?php echo $singleGood[sale_id];?>"/>
+                            <?php echo $singleGood[medicine_name];?></td>
+                        <td><?php echo number_format($singleGood[sale_price],2,'.',' ').' '.$singleGood[currency_code]?></td>
+                        <td><input type="text" name="quantity" class="form-control" value="<?php echo $singleGood[sale_quantity];?>" disabled/> </td>
+                        <td><?php echo number_format(($singleGood[sale_price] * $singleGood[sale_quantity]),2,'.',' ').' '.$singleGood[currency_code];?></td>
+                        <td><?php if ($singleGood[payment_ok]===true):?>
+                                <a href="javascript:void(0)" onclick="paymentPaid(this)" class="btn btn-info payment_button"><span class="glyphicon glyphicon-ok"></span>Оплатить</a>
+                            <?php endif;?>
+                            <a href="javascript:void(0)" onclick="activateReturn(this)" class="btn btn-warning return_button"><span class="glyphicon glyphicon-pencil"></span> Возврат</a>
+                            <a href="javascript:void(0)" onclick="saveReturn(this)" class="btn btn-info save_return_button"><span class="glyphicon glyphicon-pencil"></span>Возвратить</a>
+                            <a href="javascript:void(0)" onclick="cancelReturn(this)" class="btn btn-warning cancel_return_button"><span class="glyphicon glyphicon-remove"></span> Отмена</a>
+                        </td>
+                    </tr>
+                <?php endforeach;?>
             </table>
+            <?php endif;?>
+            <?php if (count($result[free_good_list])>0):?>
+            <h3 class="page-header">
+                Бесплатно Выданные Товары
+            </h3>
+            <table class="table table-striped table-responsive table-hover table-condensed">
+                <tr>
+                    <th>Название</th>
+                    <th>Цена</th>
+                    <th>Количество</th>
+                    <th>Сумма</th>
+                    <th>Операции</th>
+                </tr>
+                <?php foreach($result[free_good_list] as $singleGood):?>
+                    <tr>
+
+                        <td><input type="hidden" name="sale_medicine_id" value="<?php echo $singleGood[sale_medicine_id];?>"/>
+                            <input type="hidden" name="sale_id" value="<?php echo $singleGood[sale_id];?>"/>
+                            <?php echo $singleGood[medicine_name];?></td>
+                        <td><?php echo number_format($singleGood[sale_price],2,'.',' ').' '.$singleGood[currency_code]?></td>
+                        <td><input type="text" name="quantity" class="form-control" value="<?php echo $singleGood[sale_quantity];?>" disabled/> </td>
+                        <td><?php echo number_format(($singleGood[sale_price] * $singleGood[sale_quantity]),2,'.',' ').' '.$singleGood[currency_code];?></td>
+                        <td><?php if ($singleGood[payment_ok]===true):?>
+                                <a href="javascript:void(0)" onclick="paymentPaid(this)" class="btn btn-info payment_button"><span class="glyphicon glyphicon-ok"></span>Оплатить</a>
+                            <?php endif;?>
+                            <a href="javascript:void(0)" onclick="activateReturn(this)" class="btn btn-warning return_button"><span class="glyphicon glyphicon-pencil"></span> Возврат</a>
+                            <a href="javascript:void(0)" onclick="saveReturn(this)" class="btn btn-info save_return_button"><span class="glyphicon glyphicon-pencil"></span>Возвратить</a>
+                            <a href="javascript:void(0)" onclick="cancelReturn(this)" class="btn btn-warning cancel_return_button"><span class="glyphicon glyphicon-remove"></span> Отмена</a>
+                        </td>
+                    </tr>
+                <?php endforeach;?>
+            </table>
+            <?php endif;?>
         </div>
     </div>
 <?php endif;?>

@@ -43,6 +43,7 @@ class PaymentController
         if ($_POST[payment_client_id]>0){
             $result[client_data] = $this->ClientController->getSingleClientData(array(client_id=>$_POST[payment_client_id]));
             $result[unpaid_good_list] = $this->getUnpaidSaleListByClientID(array(client_id=>$_POST[payment_client_id]));
+            $result[free_good_list] = $this->getFreeSaleListByClientID(array(client_id=>$_POST[payment_client_id]));
             foreach($result[client_data][balance] as $singleBalance){
                 foreach($result[unpaid_good_list]  as  $key=>$singleItem){
                     if ($singleBalance[client_balance_currency_id]==$singleItem[sale_currency_id] && $singleBalance[client_balance_balance]>=$singleItem[sale_quantity]*$singleItem[sale_price]){
@@ -99,6 +100,18 @@ class PaymentController
         $status = 'pending';
         $statement->bindParam(':client_id', $params[client_id]);
         $statement->bindParam(':status', $status);
+        $statement->execute();
+        return  $statement->fetchAll();
+    }
+
+    private function getFreeSaleListByClientID($params)
+    {
+        global $db;
+        $statement = $db->prepare("SELECT * FROM sale
+            INNER JOIN medicine ON medicine.medicine_id = sale.sale_medicine_id
+            INNER JOIN currency ON sale.sale_currency_id = currency.currency_id
+            WHERE `sale_client_id` = :client_id AND `sale_price` = 0");
+        $statement->bindParam(':client_id', $params[client_id]);
         $statement->execute();
         return  $statement->fetchAll();
     }
@@ -173,7 +186,7 @@ class PaymentController
         $today = date('Y-m-d');
         try{
             //saving goods data
-            if ($params[good_quantity]<$saleData[sale_quantity]){
+            if ($params[good_quantity] < $saleData[sale_quantity]){
                 $statement = $db->prepare("UPDATE sale SET sale_quantity = :sale_quantity WHERE sale_id = :sale_id");
 
                 $sale_quantity = $saleData[sale_quantity] - $params[good_quantity];
@@ -186,8 +199,8 @@ class PaymentController
                 $statement->bindParam(':sale_id', $params[sale_id]);
                 $insertResult = $statement->execute();
             }
-            else if ($params[good_quantity]>$saleData[sale_quantity]){
-                echo 'fail';
+            else if ($params[good_quantity] > $saleData[sale_quantity]){
+                echo 'returning more than needed';
                 exit();
             }
             if ($insertResult!=true){
@@ -196,9 +209,9 @@ class PaymentController
             }
             $ClientController = new ClientController();
 
-            $insertResult = $ClientController->decreaseClientDebt(array(client_id=>$saleData[sale_client_id],debt=>($params[good_quantity] * $saleData[sale_price]),currency_id=>$saleData[sale_currency_id]));
-            if ($insertResult!='ok'){
-                echo 'fail';
+            $insertResult = $ClientController->decreaseClientDebt(array(client_id=>$saleData[sale_client_id], debt=>($params[good_quantity] * $saleData[sale_price]), currency_id=>$saleData[sale_currency_id]));
+            if ($insertResult=='free item returned'){
+                echo 'Free item returned';
                 exit();
             }
 
