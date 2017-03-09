@@ -380,11 +380,12 @@ class MedicineController
             $updateResult =  $statement->execute();
             $statement = $db->prepare("INSERT INTO medicine_income (medicine_income_medicine_id,medicine_income_price,medicine_income_currency_id,medicine_income_quantity,medicine_income_date)
                 VALUES(:medicine_id,:medicine_price,:medicine_currency_id,:medicine_quantity,:today)");
+			$today = date('Y-m-d');
             $statement->bindParam(':medicine_id', $params[medicine_id]);
             $statement->bindParam(':medicine_quantity', $params[medicine_quantity]);
             $statement->bindParam(':medicine_price', $thisMedicine[medicine_price]);
             $statement->bindParam(':medicine_currency_id', $thisMedicine[medicine_currency_id]);
-            $statement->bindParam(':today', date('Y-m-d'));
+            $statement->bindParam(':today', $today);
 
             $updateResult =  $statement->execute();
 
